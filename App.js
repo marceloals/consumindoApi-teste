@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Person } from "./components/Person";
 
 export default function App() {
-
+  // Definindo o armazenamento dos estados que precisamos monitorar
   const [page, setPage] = useState(1);
   const [dataView, setDataView] = useState([]);
   const [previousData, setPreviousData] = useState({});
@@ -12,9 +12,11 @@ export default function App() {
   const [isFetching, setIsFetching] = useState(false)
   const [error, setError] = useState("")
 
+  // Criando a função de captura dos dados na api
   const getData = async() => {
 
-    setIsFetching(true)
+    setIsFetching(true) // Definindo o valor de isFetching para verdadeiro enquanto carrega
+    // Fazendo o get da api com axios e controlando o status da carga 
     axios.get("https://swapi.dev/api/people?page=" + page)
       .catch(function (error) {
         const erro = JSON.stringify(error.message);
@@ -25,14 +27,15 @@ export default function App() {
         const postData = res.data.results.map((person) => (
           <Person key={person.url} data={person} />
         ));
-        setDataView(postData);
-        setPreviousData(res.data.previous);
-        setNext(res.data.next);
+        setDataView(postData); // Criando os elementos para exibir no html 
+        setPreviousData(res.data.previous); // armazenando a url da pagina anterior
+        setNext(res.data.next); // armazenando a url da proxima pagina
         console.log("data", res.data);
-        setIsFetching(false)
+        setIsFetching(false) // Retirando a exibição de carregando
       });
   }
 
+  // Usando useEffect para monitorar a mudanca de pagina 
   useEffect(() => {
     getData(page);
   }, [page]);
