@@ -1,5 +1,41 @@
 .App {
   text-align: center;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.page-indicator {
+  font-weight: 600;
+  min-width: 72px;
+}
+
+.App button {
+  border: 1px solid #d0d7de;
+  background: #f6f8fa;
+  color: #24292f;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.App button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.App button:not(:disabled):hover {
+  background: #eef2f7;
 }
 
 .App-logo {

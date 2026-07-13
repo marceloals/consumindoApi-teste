@@ -8,6 +8,7 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [dataView, setDataView] = useState([]);
   const [previousData, setPreviousData] = useState({});
+  const [totalPages, setTotalPages] = useState(null);
   const [next, setNext] = useState("")
   const [isFetching, setIsFetching] = useState(false)
   const [error, setError] = useState("")
@@ -26,12 +27,14 @@ export default function App() {
       setDataView(postData); // Criando os elementos para exibir no html
       setPreviousData(res.data.previous); // armazenando a url da pagina anterior
       setNext(res.data.next); // armazenando a url da proxima pagina
+      setTotalPages(Math.ceil(res.data.count / 10)); // total de paginas retornadas pela SWAPI
     } catch (error) {
       const erro = JSON.stringify(error.message);
       setError(erro);
       setDataView([]);
       setPreviousData(null);
       setNext("");
+      setTotalPages(null);
     } finally {
       setIsFetching(false); // Retirando a exibição de carregando
     }
@@ -50,21 +53,37 @@ export default function App() {
            <div>{isFetching ? "Updating..." : ""}</div>
            {dataView}
 
-           <button
-             disabled={!previousData || page <= 1}
-             onClick={() => setPage((pg) => pg - 1)}
-           >
-           Anterior
-           </button>
+           <div className="pagination-controls">
+             <button
+               disabled={page <= 1}
+               onClick={() => setPage(1)}
+             >
+             Primeiro
+             </button>
 
-           <span>Pag.: {page}</span>
-           
-           <button
-             disabled={!next}
-             onClick={() => setPage((old) => old + 1)}
-           >
-           Próximo
-           </button>
+             <button
+               disabled={!previousData || page <= 1}
+               onClick={() => setPage((pg) => pg - 1)}
+             >
+             Anterior
+             </button>
+
+             <span className="page-indicator">Pag.: {page}</span>
+
+             <button
+               disabled={!next}
+               onClick={() => setPage((old) => old + 1)}
+             >
+             Próximo
+             </button>
+
+             <button
+               disabled={!totalPages || page >= totalPages}
+               onClick={() => setPage(totalPages)}
+             >
+             Último
+             </button>
+           </div>
            </div>
   );
 }
